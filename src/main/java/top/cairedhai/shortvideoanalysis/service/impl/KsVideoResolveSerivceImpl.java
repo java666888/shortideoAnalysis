@@ -17,7 +17,7 @@ import top.cairedhai.shortvideoanalysis.vo.VideoInfoVo;
  **/
 @Log4j2
 @Service("KsVideoResolveSerivceImpl")
-public class KsVideoResolveSerivceImpl implements VideoResolveService {
+public class KsVideoResolveSerivceImpl extends BaseVideoResolveServiceImpl implements VideoResolveService {
 
     /**
      * 根据分享url解析出视频信息

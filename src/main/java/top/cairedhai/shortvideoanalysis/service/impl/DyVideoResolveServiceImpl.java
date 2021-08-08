@@ -17,7 +17,7 @@ import top.cairedhai.shortvideoanalysis.vo.VideoInfoVo;
  **/
 @Log4j2
 @Service("DyVideoResolveServiceImpl")
-public class DyVideoResolveServiceImpl  implements VideoResolveService {
+public class DyVideoResolveServiceImpl extends BaseVideoResolveServiceImpl  implements VideoResolveService {
 
     /**抖音视频详情接口*/
     final  static  String VIDEO_DETAILS_URL="https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids=";

@@ -8,6 +8,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+
 
 /**
  * @Description: TODO
@@ -20,6 +24,13 @@ public class HttpUtil {
     final static String UA="Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Mobile Safari/537.36";
 
 
+    /**
+     * 模拟安卓设备发起get请求
+     * @Author: Tan
+     * @Date: 2021/8/8
+     * @param url:
+     * @return: cn.hutool.http.HttpResponse
+     **/
     public static HttpResponse mockAndroidGetRequest(String url){
         log.info("请求地址:{}",url);
         HttpRequest get = cn.hutool.http.HttpUtil.createGet(url);
@@ -29,8 +40,36 @@ public class HttpUtil {
         return   response;
     }
 
+    /**
+     * get请求方式下载文件
+     * @Author: Tan
+     * @Date: 2021/8/8
+     * @param url:
+     * @return: byte[]
+     **/
+    public static byte[] getRequestDownload(String url){
+        log.info("文件下载地址:{}",url);
+        HttpRequest get = cn.hutool.http.HttpUtil.createGet(url);
+        HttpResponse execute = get.execute();
+        return execute.bodyBytes();
+    }
 
-
+    /**
+     * 设置下载头
+     * @Author: Tan
+     * @Date: 2021/8/8
+     * @param response:
+     * @param fileName:
+     * @return: void
+     **/
+    public static void setDownLoadHeader(HttpServletResponse response,String fileName){
+        response.setContentType("application/octet-stream");
+        try {
+            response.setHeader("Content-Disposition","attachment;filename=" + new String(fileName.getBytes("UTF-8"),"ISO-8859-1"));
+        } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+        }
+    }
 
 
     public static void main(String[] args) {

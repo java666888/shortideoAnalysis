@@ -8,7 +8,8 @@ package top.cairedhai.shortvideoanalysis.common.enums;
 public enum ResponseCodeEnum {
     /*通用HTTP状态码 */
     SUCESS(200, "成功"),
-    FAULURE(500,"失败");
+    FAULURE(500,"失败"),
+    PARAM_EMPTY(1001,"参数不能为空");
 
 
     private Integer code;
