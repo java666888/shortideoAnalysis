@@ -9,7 +9,8 @@ public enum ResponseCodeEnum {
     /*通用HTTP状态码 */
     SUCESS(200, "成功"),
     FAULURE(500,"失败"),
-    PARAM_EMPTY(1001,"参数不能为空");
+    PARAM_EMPTY(1001,"参数不能为空"),
+    FAILED_TO_SUBMIT(1002,"投稿失败");
 
 
     private Integer code;

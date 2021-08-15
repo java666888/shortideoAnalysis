@@ -84,7 +84,7 @@ public class VideoResolveController {
     }
 
 
-    public VideoResolveService getVideoResolveService(String url) throws Exception{
+    public static VideoResolveService  getVideoResolveService(String url) throws Exception{
         for (String key : serviceMap.keySet()) {
             if (url.contains(key)) {
                 return (VideoResolveService) SpringUtil.getBean(serviceMap.get(key));
