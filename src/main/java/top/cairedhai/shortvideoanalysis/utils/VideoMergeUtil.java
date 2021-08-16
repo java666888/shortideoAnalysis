@@ -14,9 +14,9 @@ import java.util.List;
 public class VideoMergeUtil {
 
     /** mp4 转换为ts 格式 命令 参数1 输入视频路径 参数2 输出视频路径 */
-    public final  static  String CONVERT_TS_TYPE_COMMAND="-i %s -s 720x1280  %s";
+    public final  static  String CONVERT_TS_TYPE_COMMAND="-i  %s   %s";
     /** 视频合并命令 参数1 待合并视频1路径 参数2 待合并视频2路径 参数3 合并完成视频路径 -profile:v high -level:v 4.1  */
-    public final  static  String VIDEO_MERGE_COMMAND="-i \"concat:%s|%s\" -s 720x1280 -profile:v high -level:v 4.1  -r 60 %s";
+    public final  static  String VIDEO_MERGE_COMMAND="-i \"concat:%s|%s\" -s 720x1280  -profile:v high -level:v 4.1  -r 60 %s";
     /** 视频保存目录名 */
     public final  static String VIDEO_SAVE_DIRECTORY="video";
 

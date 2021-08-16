@@ -2,6 +2,7 @@ package top.cairedhai.shortvideoanalysis.service.impl;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.http.HttpResponse;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.log4j.Log4j2;
@@ -55,6 +56,9 @@ public class BiliVideoUploadServiceImpl implements BiliVideoUploadService {
     @Value("${bilibili.contribute}")
     String contribute;
 
+    @Value("${bilibili.uploadVideoComplete}")
+    String uploadVideoComplete;
+
 
     /**
      * 根据视频信息 以及 投稿信息 上传b站 返回投稿成功的bid
@@ -73,19 +77,23 @@ public class BiliVideoUploadServiceImpl implements BiliVideoUploadService {
             byte[] sourceImg=  HttpUtil.getRequestDownload(videoInfo.getFrontCoverUrl());
             //视频合并 加上专属片头
             byte[] uploadVideo = VideoMergeUtil.videoMerge(getTitleVideo(), sourceVideo);
+            FileUtil.writeBytes(uploadVideo,"C:\\Users\\tanqingquan\\Desktop\\1231231.mp4");
             //缩放图片
             byte[] uploadImg = zoomPicture(sourceImg, 1146, 717, "jpg");
             //注册视频空间
-            JSONObject response = registerVideoSpace(System.currentTimeMillis() + ".mp4", uploadVideo.length);
+            String videoName=System.currentTimeMillis() + ".mp4";
+            JSONObject response = registerVideoSpace(videoName, uploadVideo.length);
             String uposUri=  response.getString("upos_uri");
             uposUri=uposUri.substring(uposUri.indexOf("/")+1);
             String auth=response.getString("auth");
+            String bizId=response.getString("biz_id");
             //预上传
             response = preUpload(uposUri, auth);
             String uploadId=response.getString("upload_id");
-            String bizId=response.getString("biz_id");
             //上传视频
             uploadVideo(uposUri,uploadId,uploadVideo,auth);
+            //通知b站服务器 上传完成
+            videoUploadComplete(uposUri,videoName,uploadId,bizId,auth);
             //上传封面
             String coverUrl = uploadCover(uploadImg, auth);
             param.setCover(coverUrl);
@@ -116,7 +124,7 @@ public class BiliVideoUploadServiceImpl implements BiliVideoUploadService {
         video.put("filename",uposUri.substring(uposUri.lastIndexOf("/")+1,uposUri.indexOf(".")));
         video.put("title",param.getTitle());
         video.put("desc",param.getDesc());
-        video.put("cid",bizId);
+        video.put("cid",Long.valueOf(bizId));
 
         param.setVideos(Arrays.asList(video));
 
@@ -283,8 +291,22 @@ public class BiliVideoUploadServiceImpl implements BiliVideoUploadService {
         return   JSONObject.parseObject(response.body()).getJSONObject("data").getString("bvid");
     }
 
-
-
+    /**
+     * 视频上传完成 通知b站 服务器进行转码等操作
+     * @Author: Tan
+     * @Date: 2021/8/16
+     * @param videoName:
+     * @param uploadId:
+     * @param bizId:
+     * @param auth:
+     * @return: void
+     **/
+    public void videoUploadComplete(String uposUri,String videoName,String uploadId,String bizId,String auth){
+        String url=String.format(uploadVideoComplete,uposUri,videoName,uploadId,bizId);
+        HttpCookie[] httpCookies = creteCookies();
+        JSONObject param=JSONObject.parseObject("{\"parts\":[{\"partNumber\":1,\"eTag\":\"etag\"}]}");
+        HttpUtil.postRequestJson(url,param.toJSONString(),"x-upos-auth", auth, httpCookies);
+    }
 
 
 }
