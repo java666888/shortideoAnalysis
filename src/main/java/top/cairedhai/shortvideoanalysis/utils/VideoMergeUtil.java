@@ -15,8 +15,8 @@ public class VideoMergeUtil {
 
     /** mp4 转换为ts 格式 命令 参数1 输入视频路径 参数2 输出视频路径 */
     public final  static  String CONVERT_TS_TYPE_COMMAND="-i  %s   %s";
-    /** 视频合并命令 参数1 待合并视频1路径 参数2 待合并视频2路径 参数3 合并完成视频路径 -profile:v high -level:v 4.1  */
-    public final  static  String VIDEO_MERGE_COMMAND="-i \"concat:%s|%s\" -s 720x1280  -profile:v high -level:v 4.1  -r 60 %s";
+    /** 视频合并命令 参数1 待合并视频1路径 参数2 待合并视频2路径 参数3 合并完成视频路径 -profile:v high -level:v 4.1 这是设置视频画面质量 -s 设置视频的宽高 -aspect 设置视频的从横比 这个非常重要 不然你设置了宽高你会发现播放 视频还是变形的 -r 这个是设置视频帧率  */
+    public final  static  String VIDEO_MERGE_COMMAND="-i \"concat:%s|%s\" -s 720x1280 -aspect \"0.5625\"  -profile:v high -level:v 4.1  -r 60 %s";
     /** 视频保存目录名 */
     public final  static String VIDEO_SAVE_DIRECTORY="video";
 
@@ -116,12 +116,6 @@ public class VideoMergeUtil {
     }
 
 
-    public static void main(String[] args) throws Exception {
-        File file1=new File("C:\\Users\\tanqingquan\\Desktop\\22.mp4");
-        File file2=new File("C:\\Users\\tanqingquan\\Desktop\\pt.mp4");
-        byte[] bytes = videoMerge(FileUtil.readBytes(file1), FileUtil.readBytes(file2));
-        FileUtil.writeBytes(bytes,"C:\\Users\\tanqingquan\\Desktop\\11.mp4");
-    }
 
 
 

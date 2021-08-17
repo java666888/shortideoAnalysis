@@ -77,7 +77,6 @@ public class BiliVideoUploadServiceImpl implements BiliVideoUploadService {
             byte[] sourceImg=  HttpUtil.getRequestDownload(videoInfo.getFrontCoverUrl());
             //视频合并 加上专属片头
             byte[] uploadVideo = VideoMergeUtil.videoMerge(getTitleVideo(), sourceVideo);
-            FileUtil.writeBytes(uploadVideo,"C:\\Users\\tanqingquan\\Desktop\\1231231.mp4");
             //缩放图片
             byte[] uploadImg = zoomPicture(sourceImg, 1146, 717, "jpg");
             //注册视频空间
@@ -142,7 +141,8 @@ public class BiliVideoUploadServiceImpl implements BiliVideoUploadService {
             param.setDtime(0L);
         } else{
             DateTime date = DateUtil.parse(param.getReleaseTime(), "yyyy-MM-dd HH:mm");
-            param.setDtime(date.getTime());
+            // 时间戳 以秒为单位
+            param.setDtime(date.getTime()/1000);
         }
 
     }

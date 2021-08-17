@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * @Description: TODO
+ * @Description: 执行FFmpeg 命令工具类
  * @Author: Tan
  * @CreateDate: 2021/8/10
  **/
