@@ -2,6 +2,7 @@ package top.cairedhai.shortvideoanalysis.utils;
 
 import cn.hutool.core.io.FileUtil;
 
+import java.awt.*;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -40,8 +41,7 @@ public class VideoMergeUtil {
         cmd=String.format(CONVERT_TS_TYPE_COMMAND,mp4Video2,tsVideo2);
         FfmpegCmdUtil.cmdExecut(cmd);
         //ts格式合并视频
-        String outVideo=getResourceAbsolutePath(VIDEO_SAVE_DIRECTORY)+"/"+getTimestampFileName(".mp4");
-        outVideo=outVideo.substring(1);
+        String outVideo=getResourceAbsolutePath(VIDEO_SAVE_DIRECTORY)+"\\"+getTimestampFileName(".mp4");
         cmd=String.format(VIDEO_MERGE_COMMAND,tsVideo1,tsVideo2,outVideo);
         FfmpegCmdUtil.cmdExecut(cmd);
         //读取视频 返回byte[]
@@ -112,7 +112,15 @@ public class VideoMergeUtil {
      * @return: java.lang.String
      **/
     public static String getResourceAbsolutePath(String directoryName){
-        return  Thread.currentThread().getContextClassLoader().getResource("").getPath()+directoryName;
+        String osName=System.getProperty("os.name");
+        String userName=System.getProperty("user.name");
+        String path="C:\\Users\\"+userName+"\\Desktop\\"+directoryName;
+        if("Liunx".equals(osName)){
+           path="/home/"+directoryName;
+        }
+        File directory=new File(path);
+        directory.mkdirs();
+        return path;
     }
 
 

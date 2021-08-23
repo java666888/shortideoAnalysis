@@ -8,6 +8,8 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.aop.aspectj.annotation.MetadataAwareAspectInstanceFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import sun.misc.BASE64Encoder;
 import top.cairedhai.shortvideoanalysis.param.BiliContributeParam;
@@ -21,6 +23,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.net.HttpCookie;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -155,9 +158,12 @@ public class BiliVideoUploadServiceImpl implements BiliVideoUploadService {
      * @Date: 2021/8/15
      * @return: byte[]
      **/
-    public byte[]  getTitleVideo(){
-        String path = VideoMergeUtil.getResourceAbsolutePath(VideoMergeUtil.VIDEO_SAVE_DIRECTORY) +"/pt.mp4";
-        return VideoMergeUtil.readFile(path);
+    public byte[]  getTitleVideo() throws Exception{
+        Resource resource = new ClassPathResource("video/pt.mp4");
+        InputStream inputStream = resource.getInputStream();
+        byte[] data=new byte[inputStream.available()];
+        inputStream.read(data);
+        return data;
     }
 
 
